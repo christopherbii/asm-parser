@@ -1,3 +1,7 @@
+
+include(CheckIPOSupported)
+check_ipo_supported(RESULT ipo_supported)
+
 add_library(asm-parser-lib STATIC
     utils/utils.cpp
     utils/jsonwriter.cpp
@@ -16,5 +20,10 @@ target_link_libraries(asm-parser-lib PUBLIC ctre::ctre Catch2::Catch2 fmt::fmt A
 add_executable(asm-parser main.cpp)
 
 target_link_libraries(asm-parser asm-parser-lib)
+
+set_property(
+  TARGET asm-parser
+  PROPERTY INTERPROCEDURAL_OPTIMIZATION_RELEASE ${ipo_supported}
+)
 
 add_subdirectory(test)
